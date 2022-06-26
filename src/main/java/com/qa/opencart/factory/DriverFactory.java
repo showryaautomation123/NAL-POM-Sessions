@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
@@ -12,6 +14,7 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
 
 import com.qa.opencart.exceptions.FrameWorkException;
@@ -38,9 +41,18 @@ public class DriverFactory {
 			System.out.println("Browser name is: " + browserName);
 			optionsManager=new OptionsManager(prop); 
 			if(browserName.equalsIgnoreCase("chrome")) {
-				WebDriverManager.chromedriver().setup();
-				//driver=new ChromeDriver(optionsManager.getChromeOptions());
-				tlDriver.set(new ChromeDriver(optionsManager.getChromeOptions()));
+				if(Boolean.parseBoolean(prop.getProperty("remote"))) {
+					//remote execution on Docker or cloud
+					init_remoteDriver("chrome");
+				}
+				else {
+					//local execution
+					WebDriverManager.chromedriver().setup();
+					//driver=new ChromeDriver(optionsManager.getChromeOptions());
+					tlDriver.set(new ChromeDriver(optionsManager.getChromeOptions()));
+					
+				}
+				
 			}
 			else if(browserName.equalsIgnoreCase("firefox")) {
 				WebDriverManager.firefoxdriver().setup();
@@ -61,6 +73,24 @@ public class DriverFactory {
 			return getDriver();
 		}
 		
+		private void init_remoteDriver(String browserName) {
+			System.out.println("You are running testcases on remote server"+browserName);
+			if(browserName.equalsIgnoreCase("chrome")) {
+				try {
+				tlDriver.set(new RemoteWebDriver(new URL(prop.getProperty("huburl")), optionsManager.getChromeOptions()));
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			}
+			}
+				else if(browserName.equalsIgnoreCase("firefox")) {
+					try {
+						tlDriver.set(new RemoteWebDriver(new URL(prop.getProperty("huburl")), optionsManager.getFirefoxOptions()));
+					} catch (MalformedURLException e) {
+						e.printStackTrace();
+					}
+		}
+			}
+
 		/**
 		 * get the thread local copy of driver
 		 * 

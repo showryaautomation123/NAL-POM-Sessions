@@ -11,19 +11,37 @@
 	</listeners>
 
 
-	<test name="Open Cart Login Page Test">
+	<test name="Open Cart Login Page Test_91.0">
+		<parameter name="browser" value="chrome" />
+		<parameter name="browserversion" value="91.0" />
 		<classes>
 			<class name="com.qa.opencart.tests.LoginPageTest" />
 		</classes>
 	</test>
 
-	 <test name="Open Cart Accounts Page Test">
+	<test name="Open Cart Login Page Test_89.0">
+		<parameter name="browser" value="chrome" />
+		<parameter name="browserversion" value="89.0" />
+		<classes>
+			<class name="com.qa.opencart.tests.LoginPageTest" />
+		</classes>
+	</test>
+
+	<test name="Open Cart Login Page Test_100.0">
+		<parameter name="browser" value="chrome" />
+		<parameter name="browserversion" value="100.0" />
+		<classes>
+			<class name="com.qa.opencart.tests.LoginPageTest" />
+		</classes>
+	</test>
+
+	<test name="Open Cart Accounts Page Test">
 		<classes>
 			<class name="com.qa.opencart.tests.AccountsPageTest" />
 		</classes>
 	</test>
 
-	 <test name="Open Cart Register Page Test">
+	<test name="Open Cart Register Page Test">
 		<classes>
 			<class name="com.qa.opencart.tests.RegisterTest" />
 		</classes>
